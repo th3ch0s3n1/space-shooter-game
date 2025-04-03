@@ -11,22 +11,23 @@ This is a 2D space shooter game developed in Python using Pygame. The project fe
 
 ## Project Structure
 
-├── main.py
-├── game/
-│   ├── __init__.py
-│   ├── game.py         # Contains the Game class and related game loop logic.
-│   ├── shop.py         # Contains the Shop class.
-├── entities/
-│   ├── __init__.py
-│   ├── player.py       # Contains the Player class.
-│   ├── asteroid.py     # Contains Asteroid, FastAsteroid, ZigzagAsteroid classes.
-│   ├── bullet.py       # Contains the Bullet class.
-│   └── powerup.py      # Contains the PowerUp class.
-├── utils/
-│   ├── __init__.py
-│   └── helpers.py      # Contains common utility functions.
-└── README.md
-
+```bash
+   ├── main.py
+   ├── game/
+   │   ├── __init__.py
+   │   ├── game.py         # Contains the Game class and related game loop logic.
+   │   ├── shop.py         # Contains the Shop class.
+   ├── entities/
+   │   ├── __init__.py
+   │   ├── player.py       # Contains the Player class.
+   │   ├── asteroid.py     # Contains Asteroid, FastAsteroid, ZigzagAsteroid classes.
+   │   ├── bullet.py       # Contains the Bullet class.
+   │   └── powerup.py      # Contains the PowerUp class.
+   ├── utils/
+   │   ├── __init__.py
+   │   └── helpers.py      # Contains common utility functions.
+   └── README.md
+```
 
 ## Requirements
 
