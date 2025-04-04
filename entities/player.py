@@ -27,6 +27,9 @@ class Player:
         # Invulnerability period (milliseconds) and last hit time
         self.invulnerability_duration = 2000
         self.last_hit_time = 0
+        self.shoot_sound = pygame.mixer.Sound("assets/sounds/laser.mp3")
+        self.thrust_sound = pygame.mixer.Sound("assets/sounds/engine.mp3")
+        # self.thrust_sound.set_volume(0.5)
 
     def is_invulnerable(self):
         """Check if the player is currently invulnerable."""
@@ -50,11 +53,32 @@ class Player:
         pygame.draw.polygon(self.image, self.color, self.get_points())
         self.mask = pygame.mask.from_surface(self.image)
 
+    def draw_thrust(self, screen):
+        """Draw the thrust animation behind the player."""
+        if pygame.key.get_pressed()[pygame.K_UP]:  # Check if thrust is applied
+            rad_angle = math.radians(self.angle - 90)
+            flame_offset = pygame.Vector2(
+                -(self.size / 2) * math.cos(rad_angle), -(self.size / 2) * math.sin(rad_angle)
+            )
+            flame_position = self.position + flame_offset
+            flame_points = [
+                (flame_position.x, flame_position.y),
+                (flame_position.x - 8 * math.cos(math.radians(self.angle - 120)),
+                flame_position.y - 8 * math.sin(math.radians(self.angle - 120))),
+                (flame_position.x - 8 * math.cos(math.radians(self.angle + 120)),
+                flame_position.y - 8 * math.sin(math.radians(self.angle + 120))),
+            ]
+            pygame.draw.polygon(screen, (255, 165, 0), flame_points)  # Orange flame
+
     def draw(self, screen):
         """Draw the player on the screen."""
         rotated_image = pygame.transform.rotate(self.image, -self.angle)
         new_rect = rotated_image.get_rect(center=(self.position.x, self.position.y))
         screen.blit(rotated_image, new_rect.topleft)
+
+        # Draw thrust animation
+        self.draw_thrust(screen)
+
         for bullet in self.bullets:
             bullet.draw(screen)
 
@@ -67,6 +91,9 @@ class Player:
             self.angle += self.rotation_speed
         if keys[pygame.K_UP]:
             self.apply_thrust()
+        else:
+            if self.thrust_sound.get_num_channels() > 0:
+                self.thrust_sound.stop()
         if keys[pygame.K_DOWN]:
             self.apply_slowdown()
 
@@ -86,6 +113,9 @@ class Player:
         self.velocity.x += self.thrust * math.cos(rad_angle)
         self.velocity.y += self.thrust * math.sin(rad_angle)
 
+        if self.thrust_sound.get_num_channels() == 0:  # Check if thrust sound is playing
+            self.thrust_sound.play(-1)  # Loop the sound
+                
     def apply_slowdown(self):
         """Apply slowdown to the player."""
         self.velocity *= self.slowdown
@@ -116,6 +146,9 @@ class Player:
         )
         bullet_position = self.position + bullet_offset
         self.bullets.append(Bullet(bullet_position, bullet_velocity, (255, 255, 255)))
+
+        # Play the shooting sound
+        self.shoot_sound.play()
 
     def is_bullet_on_screen(self, bullet):
         """Check if the bullet is within the screen bounds."""

@@ -6,6 +6,7 @@ import sys
 
 import pygame
 
+from .shop import Shop
 from entities.asteroid import Asteroid, FastAsteroid, ZigzagAsteroid, ASTEROID_SIZES
 from entities.player import Player
 from entities.powerup import PowerUp

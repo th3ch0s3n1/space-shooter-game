@@ -18,6 +18,7 @@ class Asteroid:
         self.image = pygame.Surface((size, size), pygame.SRCALPHA)
         pygame.draw.circle(self.image, self.color, (size // 2, size // 2), size // 2)
         self.mask = pygame.mask.from_surface(self.image)
+        self.explosion_sound = pygame.mixer.Sound("assets/sounds/explosion.mp3")
 
     def draw(self, screen):
         """Draw the asteroid on the screen."""
@@ -38,6 +39,9 @@ class Asteroid:
         return self.size / 2
 
     def split(self):
+        
+        self.explosion_sound.play()
+        
         """Split the asteroid into smaller ones."""
         if self.size == ASTEROID_SIZES["XS"]:
             return []
